@@ -24,6 +24,7 @@
       padding: 36px 40px;
       width: 100%;
       max-width: 560px;
+      overflow: hidden;
     }
 
     h1 {
@@ -112,10 +113,11 @@
 
       .container {
         padding: 24px 16px;
+        border-radius: 8px;
       }
 
       body {
-        padding: 16px 8px;
+        padding: 12px;
       }
     }
 
@@ -263,11 +265,11 @@
       }
     }
 
-    // 金額 ÷ 股價 → 股數（無條件捨去）
+    // 金額 ÷ 股價 → 股數（無條件捨去，金額欄位變動時觸發）
     function calcShares() {
       const p = parseFloat(priceInput.value);
       const a = parseFloat(amountInput.value);
-      if (!isNaN(p) && !isNaN(a) && p > 0 && a > 0 && !sharesInput.value) {
+      if (!isNaN(p) && !isNaN(a) && p > 0 && a > 0) {
         sharesInput.value = Math.floor(a / p);
       }
     }
@@ -275,6 +277,7 @@
     priceInput.addEventListener('input', calcAmount);
     sharesInput.addEventListener('input', calcAmount);
     amountInput.addEventListener('input', calcShares);
+    priceInput.addEventListener('change', calcShares);
 
     // 表單送出
     document.getElementById('stockForm').addEventListener('submit', async function(e) {
