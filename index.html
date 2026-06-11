@@ -55,6 +55,28 @@
       margin-left: 2px;
     }
 
+    select {
+      width: 100%;
+      padding: 10px 14px;
+      border: 1.5px solid #e2e8f0;
+      border-radius: 8px;
+      font-size: 0.95rem;
+      color: #2d3748;
+      background: #fafafa;
+      outline: none;
+      cursor: pointer;
+      transition: border-color 0.2s;
+      appearance: none;
+      background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 12 12'%3E%3Cpath fill='%23718096' d='M6 8L1 3h10z'/%3E%3C/svg%3E");
+      background-repeat: no-repeat;
+      background-position: right 14px center;
+    }
+
+    select:focus {
+      border-color: #4299e1;
+      background-color: #fff;
+    }
+
     input, textarea {
       width: 100%;
       padding: 10px 14px;
@@ -152,6 +174,19 @@
 
     <form id="stockForm">
 
+      <div class="section-title">股票</div>
+      <div class="form-group">
+        <label>股票代號 <span class="required">*</span></label>
+        <select name="stock" required>
+          <option value="" disabled selected>請選擇股票</option>
+          <option value="0050">0050 元大台灣50</option>
+          <option value="0056">0056 元大高股息</option>
+          <option value="00878">00878 國泰永續高股息</option>
+        </select>
+      </div>
+
+      <hr class="divider" />
+
       <div class="section-title">日期資訊</div>
       <div class="row">
         <div class="form-group">
@@ -232,6 +267,7 @@
 
       const form = e.target;
       const data = {
+        stock:        form.stock.value,
         purchaseDate: form.purchaseDate.value,
         debitDate:    form.debitDate.value,
         price:        form.price.value,
