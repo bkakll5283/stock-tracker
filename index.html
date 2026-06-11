@@ -105,13 +105,17 @@
       gap: 16px;
     }
 
-    @media (max-width: 480px) {
+    @media (max-width: 600px) {
       .row {
         grid-template-columns: 1fr;
       }
 
       .container {
-        padding: 24px 20px;
+        padding: 24px 16px;
+      }
+
+      body {
+        padding: 16px 8px;
       }
     }
 
@@ -246,11 +250,11 @@
     // ★ 請將下方網址替換為你的 Apps Script 部署網址
     const APPS_SCRIPT_URL = "https://script.google.com/macros/s/AKfycbzvAufAoUg-JlcnD0d9pCwbcJGp86Thb4WhupCJPAZhDEowJQJMaay6wba6uojxVPuu/exec";
 
-    // 自動計算成交金額
-    const priceInput = document.querySelector('[name="price"]');
+    const priceInput  = document.querySelector('[name="price"]');
     const sharesInput = document.querySelector('[name="shares"]');
     const amountInput = document.getElementById('amount');
 
+    // 股價 × 股數 → 金額
     function calcAmount() {
       const p = parseFloat(priceInput.value);
       const s = parseFloat(sharesInput.value);
@@ -259,8 +263,18 @@
       }
     }
 
+    // 金額 ÷ 股價 → 股數（無條件捨去）
+    function calcShares() {
+      const p = parseFloat(priceInput.value);
+      const a = parseFloat(amountInput.value);
+      if (!isNaN(p) && !isNaN(a) && p > 0 && a > 0 && !sharesInput.value) {
+        sharesInput.value = Math.floor(a / p);
+      }
+    }
+
     priceInput.addEventListener('input', calcAmount);
     sharesInput.addEventListener('input', calcAmount);
+    amountInput.addEventListener('input', calcShares);
 
     // 表單送出
     document.getElementById('stockForm').addEventListener('submit', async function(e) {
