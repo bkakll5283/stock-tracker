@@ -5,103 +5,177 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>股票定期定額記錄</title>
   <style>
+    :root {
+      --bg: #f0f4f8;
+      --card: #fff;
+      --text: #1a202c;
+      --text-secondary: #718096;
+      --text-muted: #a0aec0;
+      --border: #e2e8f0;
+      --input-bg: #fafafa;
+      --primary: #3182ce;
+      --primary-hover: #2b6cb0;
+      --success-bg: #c6f6d5;
+      --success-text: #276749;
+      --error-bg: #fed7d7;
+      --error-text: #9b2c2c;
+      --divider: #edf2f7;
+      --shadow: rgba(0,0,0,0.08);
+      --tab-bg: #edf2f7;
+      --tab-active: #3182ce;
+      --stat-bg: #ebf8ff;
+      --stat-border: #bee3f8;
+      --summary-bg: #f0fff4;
+      --summary-border: #c6f6d5;
+    }
+
+    [data-theme="dark"] {
+      --bg: #1a202c;
+      --card: #2d3748;
+      --text: #e2e8f0;
+      --text-secondary: #a0aec0;
+      --text-muted: #718096;
+      --border: #4a5568;
+      --input-bg: #374151;
+      --primary: #63b3ed;
+      --primary-hover: #4299e1;
+      --success-bg: #22543d;
+      --success-text: #c6f6d5;
+      --error-bg: #742a2a;
+      --error-text: #fed7d7;
+      --divider: #4a5568;
+      --shadow: rgba(0,0,0,0.3);
+      --tab-bg: #374151;
+      --tab-active: #63b3ed;
+      --stat-bg: #2a4365;
+      --stat-border: #2b6cb0;
+      --summary-bg: #22543d;
+      --summary-border: #276749;
+    }
+
     * { box-sizing: border-box; margin: 0; padding: 0; }
 
     body {
       font-family: 'Segoe UI', sans-serif;
-      background: #f0f4f8;
+      background: var(--bg);
+      color: var(--text);
       min-height: 100vh;
       display: flex;
       align-items: flex-start;
       justify-content: center;
       padding: 40px 16px;
+      transition: background 0.3s, color 0.3s;
     }
 
     .container {
-      background: #fff;
+      background: var(--card);
       border-radius: 12px;
-      box-shadow: 0 4px 24px rgba(0,0,0,0.08);
+      box-shadow: 0 4px 24px var(--shadow);
       padding: 36px 40px;
       width: 100%;
-      max-width: 560px;
-      overflow: hidden;
+      max-width: 600px;
+      transition: background 0.3s;
     }
 
-    h1 {
-      font-size: 1.4rem;
-      color: #1a202c;
+    .header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
       margin-bottom: 4px;
     }
 
-    .subtitle {
-      font-size: 0.85rem;
-      color: #718096;
-      margin-bottom: 28px;
+    h1 { font-size: 1.4rem; }
+
+    .theme-toggle {
+      background: none;
+      border: 1.5px solid var(--border);
+      border-radius: 8px;
+      padding: 6px 10px;
+      cursor: pointer;
+      font-size: 1.1rem;
+      color: var(--text);
+      transition: border-color 0.2s;
     }
 
-    .form-group {
+    .theme-toggle:hover { border-color: var(--primary); }
+
+    .subtitle {
+      font-size: 0.85rem;
+      color: var(--text-secondary);
       margin-bottom: 20px;
     }
+
+    /* ── 分頁導覽 ─────────────────────────── */
+    .tabs {
+      display: flex;
+      gap: 4px;
+      background: var(--tab-bg);
+      border-radius: 10px;
+      padding: 4px;
+      margin-bottom: 24px;
+    }
+
+    .tab {
+      flex: 1;
+      padding: 8px 4px;
+      border: none;
+      border-radius: 8px;
+      background: transparent;
+      color: var(--text-muted);
+      font-size: 0.85rem;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.2s;
+    }
+
+    .tab.active {
+      background: var(--primary);
+      color: #fff;
+    }
+
+    .tab-panel { display: none; }
+    .tab-panel.active { display: block; }
+
+    /* ── 表單元素 ─────────────────────────── */
+    .form-group { margin-bottom: 20px; }
 
     label {
       display: block;
       font-size: 0.875rem;
       font-weight: 600;
-      color: #2d3748;
+      color: var(--text);
       margin-bottom: 6px;
     }
 
-    label .required {
-      color: #e53e3e;
-      margin-left: 2px;
-    }
+    label .required { color: #e53e3e; margin-left: 2px; }
 
-    select {
+    select, input, textarea {
       width: 100%;
       padding: 10px 14px;
-      border: 1.5px solid #e2e8f0;
+      border: 1.5px solid var(--border);
       border-radius: 8px;
       font-size: 0.95rem;
-      color: #2d3748;
-      background: #fafafa;
+      color: var(--text);
+      background: var(--input-bg);
       outline: none;
-      cursor: pointer;
       transition: border-color 0.2s;
-      appearance: none;
-      background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 12 12'%3E%3Cpath fill='%23718096' d='M6 8L1 3h10z'/%3E%3C/svg%3E");
-      background-repeat: no-repeat;
-      background-position: right 14px center;
-    }
-
-    select:focus {
-      border-color: #4299e1;
-      background-color: #fff;
-    }
-
-    input, textarea {
-      width: 100%;
-      padding: 10px 14px;
-      border: 1.5px solid #e2e8f0;
-      border-radius: 8px;
-      font-size: 0.95rem;
-      color: #2d3748;
-      transition: border-color 0.2s;
-      outline: none;
-      background: #fafafa;
       min-height: 44px;
       -webkit-appearance: none;
       appearance: none;
     }
 
-    input:focus, textarea:focus {
-      border-color: #4299e1;
-      background: #fff;
+    select {
+      cursor: pointer;
+      background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 12 12'%3E%3Cpath fill='%23718096' d='M6 8L1 3h10z'/%3E%3C/svg%3E");
+      background-repeat: no-repeat;
+      background-position: right 14px center;
     }
 
-    textarea {
-      resize: vertical;
-      min-height: 80px;
+    select:focus, input:focus, textarea:focus {
+      border-color: var(--primary);
     }
+
+    textarea { resize: vertical; min-height: 80px; }
 
     .row {
       display: grid;
@@ -109,24 +183,9 @@
       gap: 16px;
     }
 
-    @media (max-width: 600px) {
-      .row {
-        grid-template-columns: 1fr;
-      }
-
-      .container {
-        padding: 24px 16px;
-        border-radius: 8px;
-      }
-
-      body {
-        padding: 12px;
-      }
-    }
-
     .divider {
       border: none;
-      border-top: 1.5px solid #edf2f7;
+      border-top: 1.5px solid var(--divider);
       margin: 24px 0;
     }
 
@@ -135,14 +194,20 @@
       font-weight: 700;
       text-transform: uppercase;
       letter-spacing: 0.08em;
-      color: #a0aec0;
+      color: var(--text-muted);
       margin-bottom: 16px;
     }
 
-    button[type="submit"] {
+    .input-hint {
+      font-size: 0.78rem;
+      color: var(--text-muted);
+      margin-top: 4px;
+    }
+
+    button[type="submit"], .btn {
       width: 100%;
       padding: 12px;
-      background: #3182ce;
+      background: var(--primary);
       color: #fff;
       border: none;
       border-radius: 8px;
@@ -153,10 +218,42 @@
       margin-top: 8px;
     }
 
-    button[type="submit"]:hover { background: #2b6cb0; }
-    button[type="submit"]:active { transform: scale(0.98); }
-    button[type="submit"]:disabled { background: #a0aec0; cursor: not-allowed; }
+    button[type="submit"]:hover, .btn:hover { background: var(--primary-hover); }
+    button[type="submit"]:active, .btn:active { transform: scale(0.98); }
+    button[type="submit"]:disabled, .btn:disabled { background: var(--text-muted); cursor: not-allowed; }
 
+    /* ── 送出摘要 ─────────────────────────── */
+    .summary-card {
+      display: none;
+      margin-top: 16px;
+      padding: 16px;
+      border-radius: 8px;
+      background: var(--summary-bg);
+      border: 1.5px solid var(--summary-border);
+    }
+
+    .summary-card.show { display: block; }
+
+    .summary-card .summary-title {
+      font-weight: 700;
+      font-size: 0.9rem;
+      margin-bottom: 10px;
+    }
+
+    .summary-card .summary-row {
+      display: flex;
+      justify-content: space-between;
+      font-size: 0.85rem;
+      padding: 3px 0;
+      color: var(--text-secondary);
+    }
+
+    .summary-card .summary-row span:last-child {
+      font-weight: 600;
+      color: var(--text);
+    }
+
+    /* ── Toast ────────────────────────────── */
     .toast {
       display: none;
       margin-top: 16px;
@@ -167,99 +264,296 @@
       text-align: center;
     }
 
-    .toast.success {
-      background: #c6f6d5;
-      color: #276749;
-      display: block;
+    .toast.success { background: var(--success-bg); color: var(--success-text); display: block; }
+    .toast.error { background: var(--error-bg); color: var(--error-text); display: block; }
+
+    /* ── 平均成本卡片 ─────────────────────── */
+    .stat-cards {
+      display: grid;
+      grid-template-columns: 1fr;
+      gap: 16px;
     }
 
-    .toast.error {
-      background: #fed7d7;
-      color: #9b2c2c;
-      display: block;
+    .stat-card {
+      background: var(--stat-bg);
+      border: 1.5px solid var(--stat-border);
+      border-radius: 10px;
+      padding: 20px;
     }
 
-    .input-hint {
-      font-size: 0.78rem;
-      color: #a0aec0;
-      margin-top: 4px;
+    .stat-card .stock-name {
+      font-size: 1.1rem;
+      font-weight: 700;
+      margin-bottom: 12px;
+    }
+
+    .stat-card .stat-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 8px;
+    }
+
+    .stat-item { text-align: center; }
+
+    .stat-item .stat-label {
+      font-size: 0.75rem;
+      color: var(--text-muted);
+      margin-bottom: 2px;
+    }
+
+    .stat-item .stat-value {
+      font-size: 1.1rem;
+      font-weight: 700;
+    }
+
+    .stat-item .stat-value.highlight {
+      color: var(--primary);
+      font-size: 1.3rem;
+    }
+
+    /* ── 歷史記錄 ─────────────────────────── */
+    .filter-row {
+      display: flex;
+      gap: 8px;
+      margin-bottom: 16px;
+    }
+
+    .filter-row select {
+      flex: 1;
+    }
+
+    .history-list {
+      max-height: 500px;
+      overflow-y: auto;
+    }
+
+    .history-item {
+      padding: 14px;
+      border: 1.5px solid var(--border);
+      border-radius: 8px;
+      margin-bottom: 10px;
+      background: var(--input-bg);
+    }
+
+    .history-item .hi-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 8px;
+    }
+
+    .history-item .hi-stock {
+      font-weight: 700;
+      font-size: 0.95rem;
+      background: var(--primary);
+      color: #fff;
+      padding: 2px 10px;
+      border-radius: 12px;
+      font-size: 0.8rem;
+    }
+
+    .history-item .hi-date {
+      font-size: 0.8rem;
+      color: var(--text-muted);
+    }
+
+    .history-item .hi-details {
+      display: grid;
+      grid-template-columns: 1fr 1fr 1fr;
+      gap: 4px;
+      font-size: 0.82rem;
+    }
+
+    .history-item .hi-details span {
+      color: var(--text-secondary);
+    }
+
+    .history-item .hi-details strong {
+      color: var(--text);
+    }
+
+    .history-item .hi-note {
+      margin-top: 6px;
+      font-size: 0.8rem;
+      color: var(--text-muted);
+      font-style: italic;
+    }
+
+    .loading {
+      text-align: center;
+      padding: 40px;
+      color: var(--text-muted);
+    }
+
+    .empty {
+      text-align: center;
+      padding: 40px;
+      color: var(--text-muted);
+      font-size: 0.9rem;
+    }
+
+    /* ── RWD ──────────────────────────────── */
+    @media (max-width: 600px) {
+      .row { grid-template-columns: 1fr; }
+      .container { padding: 24px 16px; border-radius: 8px; }
+      body { padding: 12px; }
+      .history-item .hi-details { grid-template-columns: 1fr 1fr; }
+      .stat-card .stat-grid { grid-template-columns: 1fr 1fr; }
     }
   </style>
 </head>
 <body>
   <div class="container">
-    <h1>📈 股票定期定額記錄</h1>
+    <div class="header">
+      <h1>📈 股票定期定額記錄</h1>
+      <button class="theme-toggle" id="themeToggle" title="切換深色模式">🌙</button>
+    </div>
     <p class="subtitle">填寫後送出，資料將自動寫入 Google 試算表</p>
 
-    <form id="stockForm">
+    <!-- 分頁導覽 -->
+    <div class="tabs">
+      <button class="tab active" data-tab="form">新增記錄</button>
+      <button class="tab" data-tab="stats">平均成本</button>
+      <button class="tab" data-tab="history">歷史查詢</button>
+    </div>
 
-      <div class="section-title">股票</div>
-      <div class="form-group">
-        <label>股票代號 <span class="required">*</span></label>
-        <select name="stock" required>
-          <option value="" disabled selected>請選擇股票</option>
-          <option value="0050">0050 元大台灣50</option>
-          <option value="0056">0056 元大高股息</option>
-          <option value="00878">00878 國泰永續高股息</option>
+    <!-- ═══ 分頁一：新增記錄 ═══ -->
+    <div class="tab-panel active" id="panel-form">
+      <form id="stockForm">
+        <div class="section-title">股票</div>
+        <div class="form-group">
+          <label>股票代號 <span class="required">*</span></label>
+          <select name="stock" required>
+            <option value="" disabled selected>請選擇股票</option>
+            <option value="0050">0050 元大台灣50</option>
+            <option value="0056">0056 元大高股息</option>
+            <option value="00878">00878 國泰永續高股息</option>
+          </select>
+        </div>
+
+        <hr class="divider" />
+
+        <div class="section-title">日期資訊</div>
+        <div class="row">
+          <div class="form-group">
+            <label>申購日期 <span class="required">*</span></label>
+            <input type="date" name="purchaseDate" required />
+          </div>
+          <div class="form-group">
+            <label>扣款日期 <span class="required">*</span></label>
+            <input type="date" name="debitDate" required />
+          </div>
+        </div>
+
+        <hr class="divider" />
+
+        <div class="section-title">交易明細</div>
+        <div class="row">
+          <div class="form-group">
+            <label>成交股價 <span class="required">*</span></label>
+            <input type="number" name="price" placeholder="例：150.5" step="0.01" min="0" required />
+          </div>
+          <div class="form-group">
+            <label>申購股數 <span class="required">*</span></label>
+            <input type="number" name="shares" placeholder="例：10" step="1" min="0" required />
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label>成交金額 <span class="required">*</span></label>
+          <input type="number" name="amount" id="amount" placeholder="自動計算或手動填入" step="0.01" min="0" required />
+          <p class="input-hint">填入股價與股數後會自動計算，也可手動修改</p>
+        </div>
+
+        <hr class="divider" />
+
+        <div class="section-title">備註</div>
+        <div class="form-group">
+          <label>備註</label>
+          <textarea name="note" placeholder="例：定期定額第3次、股價較低加碼..."></textarea>
+        </div>
+
+        <button type="submit" id="submitBtn">送出記錄</button>
+        <div class="toast" id="toast"></div>
+
+        <!-- 送出摘要 -->
+        <div class="summary-card" id="summaryCard">
+          <div class="summary-title">本次送出摘要</div>
+          <div class="summary-row"><span>股票代號</span><span id="sumStock"></span></div>
+          <div class="summary-row"><span>申購日期</span><span id="sumDate"></span></div>
+          <div class="summary-row"><span>成交股價</span><span id="sumPrice"></span></div>
+          <div class="summary-row"><span>申購股數</span><span id="sumShares"></span></div>
+          <div class="summary-row"><span>成交金額</span><span id="sumAmount"></span></div>
+          <div class="summary-row"><span>備註</span><span id="sumNote"></span></div>
+        </div>
+      </form>
+    </div>
+
+    <!-- ═══ 分頁二：平均成本 ═══ -->
+    <div class="tab-panel" id="panel-stats">
+      <div class="stat-cards" id="statCards">
+        <div class="loading">載入中...</div>
+      </div>
+    </div>
+
+    <!-- ═══ 分頁三：歷史查詢 ═══ -->
+    <div class="tab-panel" id="panel-history">
+      <div class="filter-row">
+        <select id="historyFilter">
+          <option value="">全部股票</option>
+          <option value="0050">0050</option>
+          <option value="0056">0056</option>
+          <option value="00878">00878</option>
         </select>
       </div>
-
-      <hr class="divider" />
-
-      <div class="section-title">日期資訊</div>
-      <div class="row">
-        <div class="form-group">
-          <label>申購日期 <span class="required">*</span></label>
-          <input type="date" name="purchaseDate" required />
-        </div>
-        <div class="form-group">
-          <label>扣款日期 <span class="required">*</span></label>
-          <input type="date" name="debitDate" required />
-        </div>
+      <div class="history-list" id="historyList">
+        <div class="loading">載入中...</div>
       </div>
-
-      <hr class="divider" />
-
-      <div class="section-title">交易明細</div>
-      <div class="row">
-        <div class="form-group">
-          <label>成交股價 <span class="required">*</span></label>
-          <input type="number" name="price" placeholder="例：150.5" step="0.01" min="0" required />
-        </div>
-        <div class="form-group">
-          <label>申購股數 <span class="required">*</span></label>
-          <input type="number" name="shares" placeholder="例：10" step="1" min="0" required />
-        </div>
-      </div>
-
-      <div class="form-group">
-        <label>成交金額 <span class="required">*</span></label>
-        <input type="number" name="amount" id="amount" placeholder="自動計算或手動填入" step="0.01" min="0" required />
-        <p class="input-hint">填入股價與股數後會自動計算，也可手動修改</p>
-      </div>
-
-      <hr class="divider" />
-
-      <div class="section-title">備註</div>
-      <div class="form-group">
-        <label>備註</label>
-        <textarea name="note" placeholder="例：定期定額第3次、股價較低加碼..."></textarea>
-      </div>
-
-      <button type="submit" id="submitBtn">送出記錄</button>
-      <div class="toast" id="toast"></div>
-    </form>
+    </div>
   </div>
 
   <script>
-    // ★ 請將下方網址替換為你的 Apps Script 部署網址
     const APPS_SCRIPT_URL = "https://script.google.com/macros/s/AKfycbzvAufAoUg-JlcnD0d9pCwbcJGp86Thb4WhupCJPAZhDEowJQJMaay6wba6uojxVPuu/exec";
 
+    // ── 深色模式 ──────────────────────────────────────────────
+    const themeToggle = document.getElementById('themeToggle');
+    const savedTheme = localStorage.getItem('theme') || 'light';
+    if (savedTheme === 'dark') {
+      document.documentElement.setAttribute('data-theme', 'dark');
+      themeToggle.textContent = '☀️';
+    }
+
+    themeToggle.addEventListener('click', () => {
+      const isDark = document.documentElement.getAttribute('data-theme') === 'dark';
+      if (isDark) {
+        document.documentElement.removeAttribute('data-theme');
+        themeToggle.textContent = '🌙';
+        localStorage.setItem('theme', 'light');
+      } else {
+        document.documentElement.setAttribute('data-theme', 'dark');
+        themeToggle.textContent = '☀️';
+        localStorage.setItem('theme', 'dark');
+      }
+    });
+
+    // ── 分頁切換 ──────────────────────────────────────────────
+    document.querySelectorAll('.tab').forEach(tab => {
+      tab.addEventListener('click', () => {
+        document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
+        document.querySelectorAll('.tab-panel').forEach(p => p.classList.remove('active'));
+        tab.classList.add('active');
+        document.getElementById('panel-' + tab.dataset.tab).classList.add('active');
+
+        if (tab.dataset.tab === 'stats') loadStats();
+        if (tab.dataset.tab === 'history') loadHistory();
+      });
+    });
+
+    // ── 自動計算 ──────────────────────────────────────────────
     const priceInput  = document.querySelector('[name="price"]');
     const sharesInput = document.querySelector('[name="shares"]');
     const amountInput = document.getElementById('amount');
 
-    // 股價 × 股數 → 金額
     function calcAmount() {
       const p = parseFloat(priceInput.value);
       const s = parseFloat(sharesInput.value);
@@ -268,7 +562,6 @@
       }
     }
 
-    // 金額 ÷ 股價 → 股數（無條件捨去，金額欄位變動時觸發）
     function calcShares() {
       const p = parseFloat(priceInput.value);
       const a = parseFloat(amountInput.value);
@@ -282,14 +575,9 @@
     amountInput.addEventListener('input', calcShares);
     priceInput.addEventListener('change', calcShares);
 
-    // 表單送出
+    // ── 表單送出 + 摘要 ───────────────────────────────────────
     document.getElementById('stockForm').addEventListener('submit', async function(e) {
       e.preventDefault();
-
-      if (APPS_SCRIPT_URL === "YOUR_APPS_SCRIPT_URL_HERE") {
-        showToast('error', '請先設定 Apps Script 網址（見 index.html 第 120 行）');
-        return;
-      }
 
       const btn = document.getElementById('submitBtn');
       btn.disabled = true;
@@ -306,6 +594,15 @@
         note:         form.note.value,
       };
 
+      // 顯示送出摘要
+      const stockText = form.stock.options[form.stock.selectedIndex].text;
+      document.getElementById('sumStock').textContent = stockText;
+      document.getElementById('sumDate').textContent = data.purchaseDate;
+      document.getElementById('sumPrice').textContent = '$' + parseFloat(data.price).toFixed(2);
+      document.getElementById('sumShares').textContent = data.shares + ' 股';
+      document.getElementById('sumAmount').textContent = '$' + parseInt(data.amount).toLocaleString();
+      document.getElementById('sumNote').textContent = data.note || '-';
+
       try {
         await fetch(APPS_SCRIPT_URL, {
           method: 'POST',
@@ -314,10 +611,11 @@
           body: JSON.stringify(data),
         });
 
-        showToast('success', '✅ 記錄已成功寫入 Google 試算表！');
+        showToast('success', '記錄已成功寫入 Google 試算表！');
+        document.getElementById('summaryCard').classList.add('show');
         form.reset();
       } catch (err) {
-        showToast('error', '❌ 送出失敗，請確認網址設定是否正確。');
+        showToast('error', '送出失敗，請確認網路連線。');
       } finally {
         btn.disabled = false;
         btn.textContent = '送出記錄';
@@ -328,8 +626,116 @@
       const toast = document.getElementById('toast');
       toast.className = 'toast ' + type;
       toast.textContent = msg;
-      setTimeout(() => { toast.className = 'toast'; }, 5000);
+      setTimeout(() => {
+        toast.className = 'toast';
+      }, 5000);
     }
+
+    // ── 平均成本 ──────────────────────────────────────────────
+    async function loadStats() {
+      const container = document.getElementById('statCards');
+      container.innerHTML = '<div class="loading">載入中...</div>';
+
+      try {
+        const res = await fetch(APPS_SCRIPT_URL + '?action=stats');
+        const stats = await res.json();
+
+        let html = '';
+        const names = { '0050': '元大台灣50', '0056': '元大高股息', '00878': '國泰永續高股息' };
+
+        for (const [code, s] of Object.entries(stats)) {
+          html += `
+            <div class="stat-card">
+              <div class="stock-name">${code} ${names[code] || ''}</div>
+              <div class="stat-grid">
+                <div class="stat-item">
+                  <div class="stat-label">平均成本</div>
+                  <div class="stat-value highlight">$${s.avgCost.toFixed(2)}</div>
+                </div>
+                <div class="stat-item">
+                  <div class="stat-label">交易筆數</div>
+                  <div class="stat-value">${s.count} 筆</div>
+                </div>
+                <div class="stat-item">
+                  <div class="stat-label">累積股數</div>
+                  <div class="stat-value">${s.totalShares.toLocaleString()} 股</div>
+                </div>
+                <div class="stat-item">
+                  <div class="stat-label">累積金額</div>
+                  <div class="stat-value">$${s.totalAmount.toLocaleString()}</div>
+                </div>
+              </div>
+            </div>`;
+        }
+
+        container.innerHTML = html;
+      } catch (err) {
+        container.innerHTML = '<div class="empty">載入失敗，請確認 Apps Script 已更新並重新部署。</div>';
+      }
+    }
+
+    // ── 歷史查詢 ──────────────────────────────────────────────
+    let historyCache = null;
+
+    async function loadHistory() {
+      const container = document.getElementById('historyList');
+      const filter = document.getElementById('historyFilter').value;
+
+      if (!historyCache) {
+        container.innerHTML = '<div class="loading">載入中...</div>';
+        try {
+          const res = await fetch(APPS_SCRIPT_URL + '?action=history');
+          historyCache = await res.json();
+        } catch (err) {
+          container.innerHTML = '<div class="empty">載入失敗，請確認 Apps Script 已更新並重新部署。</div>';
+          return;
+        }
+      }
+
+      renderHistory(filter);
+    }
+
+    function renderHistory(filter) {
+      const container = document.getElementById('historyList');
+      let allItems = [];
+
+      for (const [code, records] of Object.entries(historyCache)) {
+        if (filter && filter !== code) continue;
+        records.forEach(r => {
+          allItems.push({ code, ...r });
+        });
+      }
+
+      allItems.sort((a, b) => b.purchaseDate.localeCompare(a.purchaseDate));
+
+      if (allItems.length === 0) {
+        container.innerHTML = '<div class="empty">沒有交易記錄</div>';
+        return;
+      }
+
+      let html = '';
+      allItems.forEach(item => {
+        html += `
+          <div class="history-item">
+            <div class="hi-header">
+              <span class="hi-stock">${item.code}</span>
+              <span class="hi-date">${item.purchaseDate}</span>
+            </div>
+            <div class="hi-details">
+              <span>股價 <strong>$${parseFloat(item.price).toFixed(2)}</strong></span>
+              <span>股數 <strong>${parseInt(item.shares)}</strong></span>
+              <span>金額 <strong>$${parseInt(item.amount).toLocaleString()}</strong></span>
+            </div>
+            ${item.note ? '<div class="hi-note">' + item.note + '</div>' : ''}
+          </div>`;
+      });
+
+      container.innerHTML = html;
+    }
+
+    document.getElementById('historyFilter').addEventListener('change', () => {
+      renderHistory(document.getElementById('historyFilter').value);
+    });
   </script>
 </body>
 </html>
