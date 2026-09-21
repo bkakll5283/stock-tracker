@@ -594,9 +594,10 @@
         });
         showToast('success', '記錄已成功寫入 Google 試算表！');
         document.getElementById('summaryCard').classList.add('show');
-        historyCache = null; // 清快取，下次進歷史頁會重新載入
+        historyCache = null;
+        const lastStock = localStorage.getItem('lastStock') || '';
         form.reset();
-        if (saved) stockSelect.value = localStorage.getItem('lastStock') || '';
+        if (lastStock) stockSelect.value = lastStock;
       } catch (err) {
         showToast('error', '送出失敗，請確認網路連線。');
       } finally {
