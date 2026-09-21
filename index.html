@@ -705,7 +705,11 @@
         });
       }
 
-      allItems.sort((a, b) => b.purchaseDate.localeCompare(a.purchaseDate));
+      allItems.sort((a, b) => {
+        const da = new Date(a.purchaseDate.replace(/\//g, '-'));
+        const db = new Date(b.purchaseDate.replace(/\//g, '-'));
+        return db - da;
+      });
 
       if (allItems.length === 0) {
         container.innerHTML = '<div class="empty">沒有交易記錄</div>';
